@@ -1,5 +1,10 @@
-const Cart = require('../models/cart');
-const Product = require('../models/product');
+const {
+    getCartService,
+    addToCartService,
+    updateCartService,
+    removeFromCartService,
+    clearCartService
+} = require('../services/cartService');
 
 const getCart = async (req, res) => {
     try {
@@ -8,15 +13,8 @@ const getCart = async (req, res) => {
             return res.status(401).json({ EC: 1, EM: 'Unauthorized' });
         }
 
-        let cart = await Cart.findOne({ userEmail: email }).populate('items.product');
-        if (!cart) {
-            cart = await Cart.create({ userEmail: email, items: [] });
-        }
-
-        return res.status(200).json({
-            EC: 0,
-            DT: cart
-        });
+        const result = await getCartService(email);
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({
             EC: -1,
@@ -38,34 +36,17 @@ const addToCart = async (req, res) => {
             return res.status(400).json({ EC: 2, EM: 'Product ID is required' });
         }
 
-        // Check if product exists and check stock
-        const product = await Product.findById(productId);
-        if (!product) {
-            return res.status(404).json({ EC: 3, EM: 'Product not found' });
-        }
-
-        let cart = await Cart.findOne({ userEmail: email });
-        if (!cart) {
-            cart = await Cart.create({
-                userEmail: email,
-                items: [{ product: productId, quantity }]
+        const result = await addToCartService(email, productId, quantity);
+        if (result.EC !== 0) {
+            let statusCode = 400;
+            if (result.EC === 3) statusCode = 404;
+            return res.status(statusCode).json({
+                EC: result.EC,
+                EM: result.EM
             });
-        } else {
-            const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
-            if (itemIndex > -1) {
-                cart.items[itemIndex].quantity += Number(quantity);
-            } else {
-                cart.items.push({ product: productId, quantity: Number(quantity) });
-            }
-            await cart.save();
         }
 
-        const populatedCart = await Cart.findOne({ userEmail: email }).populate('items.product');
-
-        return res.status(200).json({
-            EC: 0,
-            DT: populatedCart
-        });
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({
             EC: -1,
@@ -91,25 +72,17 @@ const updateCart = async (req, res) => {
             return res.status(400).json({ EC: 3, EM: 'Quantity must be at least 1' });
         }
 
-        const cart = await Cart.findOne({ userEmail: email });
-        if (!cart) {
-            return res.status(404).json({ EC: 4, EM: 'Cart not found' });
+        const result = await updateCartService(email, productId, quantity);
+        if (result.EC !== 0) {
+            let statusCode = 400;
+            if (result.EC === 4 || result.EC === 5) statusCode = 404;
+            return res.status(statusCode).json({
+                EC: result.EC,
+                EM: result.EM
+            });
         }
 
-        const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
-        if (itemIndex > -1) {
-            cart.items[itemIndex].quantity = Number(quantity);
-            await cart.save();
-        } else {
-            return res.status(404).json({ EC: 5, EM: 'Item not found in cart' });
-        }
-
-        const populatedCart = await Cart.findOne({ userEmail: email }).populate('items.product');
-
-        return res.status(200).json({
-            EC: 0,
-            DT: populatedCart
-        });
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({
             EC: -1,
@@ -127,20 +100,17 @@ const removeFromCart = async (req, res) => {
             return res.status(401).json({ EC: 1, EM: 'Unauthorized' });
         }
 
-        const cart = await Cart.findOne({ userEmail: email });
-        if (!cart) {
-            return res.status(404).json({ EC: 2, EM: 'Cart not found' });
+        const result = await removeFromCartService(email, productId);
+        if (result.EC !== 0) {
+            let statusCode = 400;
+            if (result.EC === 2) statusCode = 404;
+            return res.status(statusCode).json({
+                EC: result.EC,
+                EM: result.EM
+            });
         }
 
-        cart.items = cart.items.filter(item => item.product.toString() !== productId);
-        await cart.save();
-
-        const populatedCart = await Cart.findOne({ userEmail: email }).populate('items.product');
-
-        return res.status(200).json({
-            EC: 0,
-            DT: populatedCart
-        });
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({
             EC: -1,
@@ -156,16 +126,8 @@ const clearCart = async (req, res) => {
             return res.status(401).json({ EC: 1, EM: 'Unauthorized' });
         }
 
-        const cart = await Cart.findOne({ userEmail: email });
-        if (cart) {
-            cart.items = [];
-            await cart.save();
-        }
-
-        return res.status(200).json({
-            EC: 0,
-            DT: cart
-        });
+        const result = await clearCartService(email);
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({
             EC: -1,
