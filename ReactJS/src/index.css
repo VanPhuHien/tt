@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #00f2ff;
+  --color-primary-dark: #00c2cc;
+  --color-secondary: #ff00ea;
+  --color-dark: #0a0a0b;
+  --color-dark-lighter: #16161a;
+  --color-dark-card: #1c1c21;
+}
+
+@layer base {
+  body {
+    background-color: #0a0a0b;
+    color: #f3f4f6;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(0, 242, 255, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(255, 0, 234, 0.05) 0px, transparent 50%);
+    min-height: 100vh;
+  }
+}
+
+/* Custom UI Components */
+.glass {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  transition: all 0.3s;
+}
+
+.glass-card:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary {
+  background-color: #00f2ff;
+  color: #0a0a0b;
+  font-weight: 700;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.neon-text {
+  color: #00f2ff;
+  filter: drop-shadow(0 0 8px rgba(0, 242, 255, 0.8));
+}
+
+/* Swiper custom styles */
+.swiper-pagination-bullet {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: #00f2ff !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #0a0a0b;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Swiper Custom Navigation Buttons */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #00f2ff !important;
+  background: rgba(10, 10, 11, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(8px) !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  transition: all 0.3s !important;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  border-color: #00f2ff !important;
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.3) !important;
+  color: #fff !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 16px !important;
+  font-weight: bold !important;
+}
+
+/* Ant Design Custom Cyber Select & Dropdown styling */
+.cyber-select.ant-select {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+  transition: all 0.3s !important;
+}
+
+.cyber-select.ant-select:hover,
+.cyber-select.ant-select-focused {
+  border-color: #00f2ff !important;
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.2) !important;
+}
+
+.cyber-select .ant-select-selection-item {
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+
+.cyber-select .ant-select-arrow {
+  color: #00f2ff !important;
+}
+
+/* Dropdown list container */
+.cyber-dropdown.ant-select-dropdown {
+  background: rgba(22, 22, 26, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 6px !important;
+}
+
+/* Individual options */
+.cyber-dropdown .ant-select-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 8px !important;
+  transition: all 0.2s !important;
+  margin: 2px 0 !important;
+  font-weight: 500 !important;
+}
+
+.cyber-dropdown .ant-select-item-option-active {
+  background: rgba(0, 242, 255, 0.15) !important;
+  color: #00f2ff !important;
+}
+
+.cyber-dropdown .ant-select-item-option-selected {
+  background: #00f2ff !important;
+  color: #0a0a0b !important;
+  font-weight: bold !important;
+}

@@ -1,0 +1,17 @@
+const generateOTP = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+const getOTPExpiry = (minutes = 5) => {
+    return new Date(Date.now() + minutes * 60 * 1000);
+};
+
+const isOTPExpired = (otpExpiry) => {
+    return new Date() > otpExpiry;
+};
+
+module.exports = {
+    generateOTP,
+    getOTPExpiry,
+    isOTPExpired
+};
